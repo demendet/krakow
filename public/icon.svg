@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Kraków ledger">
+  <rect width="512" height="512" fill="#0B1416"/>
+  <g>
+    <rect x="96"  y="96"  width="68" height="68" rx="6" fill="#E8A33D"/>
+    <rect x="180" y="96"  width="68" height="68" rx="6" fill="#E8A33D" opacity=".62"/>
+    <rect x="264" y="96"  width="68" height="68" rx="6" fill="#21363E"/>
+    <rect x="348" y="96"  width="68" height="68" rx="6" fill="#21363E"/>
+
+    <rect x="96"  y="180" width="68" height="68" rx="6" fill="#E8A33D" opacity=".62"/>
+    <rect x="180" y="180" width="68" height="68" rx="6" fill="#F1EADB"/>
+    <rect x="264" y="180" width="68" height="68" rx="6" fill="#E8A33D" opacity=".38"/>
+    <rect x="348" y="180" width="68" height="68" rx="6" fill="#21363E"/>
+
+    <rect x="96"  y="264" width="68" height="68" rx="6" fill="#21363E"/>
+    <rect x="180" y="264" width="68" height="68" rx="6" fill="#3FB8A6" opacity=".38"/>
+    <rect x="264" y="264" width="68" height="68" rx="6" fill="#F1EADB"/>
+    <rect x="348" y="264" width="68" height="68" rx="6" fill="#3FB8A6" opacity=".62"/>
+
+    <rect x="96"  y="348" width="68" height="68" rx="6" fill="#21363E"/>
+    <rect x="180" y="348" width="68" height="68" rx="6" fill="#21363E"/>
+    <rect x="264" y="348" width="68" height="68" rx="6" fill="#3FB8A6" opacity=".62"/>
+    <rect x="348" y="348" width="68" height="68" rx="6" fill="#3FB8A6"/>
+  </g>
+</svg>

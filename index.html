@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"
+    />
+    <title>Kraków ledger</title>
+    <meta name="description" content="What you spent, what Mikko spent, and who ends up owing who." />
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b1416" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f4efe4" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Kraków" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/icon-180.png" />
+    <style>
+      /* Painted before the bundle lands, so there is no white flash and no shift. */
+      html { background: #0b1416; }
+      @media (prefers-color-scheme: light) { html { background: #f4efe4; } }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

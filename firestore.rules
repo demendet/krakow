@@ -1,0 +1,19 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // The event log. Append-only at the database level, not just by convention
+    // in the client: an edit is a new event, a deletion is a new event, and
+    // nothing that has been written can ever be changed or removed.
+    match /users/{uid}/events/{eventId} {
+      allow read:   if request.auth != null && request.auth.uid == uid;
+      allow create: if request.auth != null && request.auth.uid == uid;
+      allow update, delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
