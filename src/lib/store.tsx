@@ -210,42 +210,45 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const importEvents = useCallback(
     async (incoming: Event[], strategy: 'replace' | 'merge') => {
       const sorted = [...incoming].sort((a, b) => a.seq - b.seq)
-      const drafts: NewEvent[] = []
+      const now = new Date().toISOString()
+      const built: Event[] = []
+
+      const add = (body: NewEvent, id: string) => {
+        built.push({ ...body, id, at: body.at ?? now, seq: ++seqRef.current } as Event)
+      }
 
       if (strategy === 'replace') {
         // The log is append-only at the database level, so a replace is a
         // retraction of everything live followed by the imported history.
-        for (const x of d.expenses) drafts.push({ type: 'expense_deleted', targetId: x.id })
-        for (const s of d.settlements) drafts.push({ type: 'settlement_deleted', targetId: s.id })
+        for (const x of d.expenses) add({ type: 'expense_deleted', targetId: x.id }, newId())
+        for (const s of d.settlements) add({ type: 'settlement_deleted', targetId: s.id }, newId())
       }
 
-      const known = new Set<string>()
-      for (const e of events) {
-        if (e.type === 'expense_added' || e.type === 'settlement_added') known.add(e.payload.id)
-      }
+      // Dedupe on the event id, not the payload id: edits and retractions have
+      // no payload, and re-importing the same file must be a genuine no-op
+      // rather than a log that grows every time.
+      const known = new Set(events.map((e) => e.id))
 
       for (const e of sorted) {
+        const { seq: _seq, id, ...rest } = e
         if (strategy === 'merge') {
-          if (e.type === 'expense_added' && known.has(e.payload.id)) continue
-          if (e.type === 'settlement_added' && known.has(e.payload.id)) continue
+          if (known.has(id)) continue
+          // keep the original id so a later re-import recognises it
+          add(rest as NewEvent, id)
+        } else {
+          // after a replace the old ids may still be live, so mint fresh ones
+          add(rest as NewEvent, newId())
         }
-        const { seq: _seq, id: _id, ...rest } = e
-        drafts.push(rest as NewEvent)
       }
 
-      if (mode === 'firestore' && user && drafts.length > 20) {
+      if (built.length === 0) return 0
+
+      if (mode === 'firestore' && user && built.length > 20) {
         // one round trip instead of hundreds
         let batch = writeBatch(db)
         let n = 0
-        const now = new Date().toISOString()
-        for (const draft of drafts) {
-          const built = {
-            ...draft,
-            id: newId(),
-            at: draft.at ?? now,
-            seq: ++seqRef.current,
-          } as Event
-          batch.set(doc(db, 'users', user.uid, 'events', built.id), built as object)
+        for (const e of built) {
+          batch.set(doc(db, 'users', user.uid, 'events', e.id), e as object)
           if (++n % 400 === 0) {
             void batch.commit()
             batch = writeBatch(db)
@@ -253,11 +256,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         }
         void batch.commit()
       } else {
-        appendMany(drafts)
+        persist(built)
       }
-      return drafts.length
+      return built.length
     },
-    [appendMany, d.expenses, d.settlements, events, mode, user],
+    [d.expenses, d.settlements, events, mode, persist, user],
   )
 
   const setDemo = useCallback((on: boolean) => {

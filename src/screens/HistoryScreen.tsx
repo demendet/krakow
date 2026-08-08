@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react'
 import { EditExpense } from '../components/EditExpense'
+import { Empty } from '../components/Empty'
 import { SwipeRow } from '../components/SwipeRow'
 import { useToast } from '../components/Toast'
+import { dayLabel, localDayKey, time } from '../lib/dates'
 import { GLYPH, formatBase, formatMoney, splitShort } from '../lib/money'
 import { useStore } from '../lib/store'
 import type { Expense, Settlement } from '../lib/types'
@@ -23,7 +25,7 @@ export function HistoryScreen() {
 
     const map = new Map<string, Item[]>()
     for (const it of items) {
-      const key = it.at.slice(0, 10)
+      const key = localDayKey(it.at)
       const arr = map.get(key)
       if (arr) arr.push(it)
       else map.set(key, [it])
@@ -182,33 +184,3 @@ function SettlementRow({ s, onDelete }: { s: Settlement; onDelete: () => void })
   )
 }
 
-export function Empty({ title, body }: { title: string; body: string }) {
-  return (
-    <div className="flex flex-col items-center justify-center px-8 py-20 text-center">
-      <div className="mosaic mb-5 w-16" aria-hidden />
-      <h2 className="disp" style={{ fontSize: 'var(--text-title)', fontWeight: 600 }}>
-        {title}
-      </h2>
-      <p className="mt-2 max-w-[22rem]" style={{ color: 'var(--fg-dim)' }}>
-        {body}
-      </p>
-    </div>
-  )
-}
-
-export function dayLabel(day: string) {
-  const today = new Date()
-  const d = new Date(`${day}T12:00:00`)
-  const diff = Math.round(
-    (new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime() -
-      new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime()) /
-      86400000,
-  )
-  if (diff === 0) return 'Today'
-  if (diff === 1) return 'Yesterday'
-  return d.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })
-}
-
-export function time(iso: string) {
-  return new Date(iso).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
-}

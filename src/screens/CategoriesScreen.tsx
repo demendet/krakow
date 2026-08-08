@@ -1,6 +1,6 @@
 import { formatBase } from '../lib/money'
 import { useStore } from '../lib/store'
-import { Empty } from './HistoryScreen'
+import { Empty } from '../components/Empty'
 
 const TONES = [
   'var(--accent-owed)',

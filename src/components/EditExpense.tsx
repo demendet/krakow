@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Chip } from './Chip'
 import { Sheet } from './Sheet'
+import { toLocalInput } from '../lib/dates'
 import { convertToBase, snapshotRate } from '../lib/fx'
 import { GLYPH, formatBase } from '../lib/money'
 import {
@@ -217,8 +218,3 @@ function Row({ label, children }: { label: string; children: React.ReactNode }) 
   )
 }
 
-function toLocalInput(iso: string) {
-  const d = new Date(iso)
-  const pad = (n: number) => String(n).padStart(2, '0')
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
-}

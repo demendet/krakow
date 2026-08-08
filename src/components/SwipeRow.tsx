@@ -47,6 +47,9 @@ export function SwipeRow({
           start.current = { x: e.clientX, y: e.clientY }
           moved.current = false
           locked.current = null
+          // Without capture, a finger that slides off the row mid-drag never
+          // delivers pointerup here and the row stays stuck open.
+          e.currentTarget.setPointerCapture?.(e.pointerId)
         }}
         onPointerMove={(e) => {
           if (!start.current) return
@@ -60,7 +63,8 @@ export function SwipeRow({
           moved.current = true
           setDx(Math.min(0, ddx))
         }}
-        onPointerUp={() => {
+        onPointerUp={(e) => {
+          e.currentTarget.releasePointerCapture?.(e.pointerId)
           const hit = dx < -THRESHOLD
           start.current = null
           if (hit) {

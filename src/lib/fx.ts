@@ -1,3 +1,4 @@
+import { localDayKey } from './dates'
 import type { Currency } from './types'
 import { BASE } from './types'
 
@@ -68,7 +69,7 @@ export function ratesAreFresh() {
 }
 
 function sameDay(iso: string) {
-  return iso.slice(0, 10) === new Date().toISOString().slice(0, 10)
+  return localDayKey(iso) === localDayKey(new Date())
 }
 
 /**

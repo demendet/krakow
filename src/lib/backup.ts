@@ -1,3 +1,4 @@
+import { localDayKey } from './dates'
 import type { Event } from './types'
 
 export type Backup = {
@@ -29,7 +30,7 @@ export function serialise(events: Event[]) {
 }
 
 export function filename() {
-  return `krakow-ledger-${new Date().toISOString().slice(0, 10)}.json`
+  return `krakow-ledger-${localDayKey(new Date())}.json`
 }
 
 export function download(events: Event[]) {

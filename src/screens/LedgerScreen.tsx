@@ -1,7 +1,8 @@
 import { useMemo } from 'react'
+import { Empty } from '../components/Empty'
+import { stamp } from '../lib/dates'
 import { buildLedger, type LedgerRow } from '../lib/ledger'
 import { useStore } from '../lib/store'
-import { Empty } from './HistoryScreen'
 
 const TONE: Record<LedgerRow['tone'], { mark: string; color: string; word: string }> = {
   add: { mark: '+', color: 'var(--accent-owed)', word: 'added' },
@@ -104,14 +105,4 @@ export function LedgerScreen() {
       </ol>
     </div>
   )
-}
-
-function stamp(iso: string) {
-  const d = new Date(iso)
-  return d.toLocaleString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    hour: '2-digit',
-    minute: '2-digit',
-  })
 }
