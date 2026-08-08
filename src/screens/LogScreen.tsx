@@ -11,6 +11,7 @@ import { newId } from '../lib/ids'
 import { GLYPH, formatBase, formatMoney, splitShort } from '../lib/money'
 import { useStore } from '../lib/store'
 import { CATEGORIES, type Currency, type Expense, type Person, type Split } from '../lib/types'
+import { HistoryScreen } from './HistoryScreen'
 
 const CURRENCIES: Currency[] = ['PLN', 'NOK', 'EUR']
 const CUR_TONE: Record<Currency, string> = {
@@ -116,12 +117,14 @@ export function LogScreen({ onOpenBalance }: { onOpenBalance: () => void }) {
   const hasAmount = amount > 0
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <div className="shrink-0 px-4 pt-2 pb-2">
+    <div className="flex min-h-0 flex-1 flex-col lg:flex-row lg:gap-6 lg:p-6">
+      {/* entry column ---------------------------------------------------- */}
+      <div className="flex min-h-0 flex-1 flex-col lg:w-[23rem] lg:flex-none">
+      <div className="shrink-0 px-4 pt-2 pb-2 lg:hidden">
         <Balance balance={d.balance} size="compact" onClick={onOpenBalance} />
       </div>
 
-      <div className="mosaic mx-4" aria-hidden />
+      <div className="mosaic mx-4 lg:hidden" aria-hidden />
 
       {/* amount ---------------------------------------------------------- */}
       <div className="shrink-0 px-4 pt-2">
@@ -229,6 +232,28 @@ export function LogScreen({ onOpenBalance }: { onOpenBalance: () => void }) {
         <PayerButton label="I paid" tone="var(--accent-owed)" onClick={() => save('mattis')} />
         <PayerButton label="Mikko paid" tone="var(--accent-owing)" onClick={() => save('mikko')} />
       </div>
+      <p
+        className="hidden shrink-0 px-4 pb-1 lg:block"
+        style={{ fontSize: 'var(--text-micro)', color: 'var(--fg-dim)' }}
+      >
+        Number keys, comma and backspace work too.
+      </p>
+      </div>
+
+      {/* on a laptop there is room to show the number and the run of
+          expenses next to the keypad instead of a screen away */}
+      <aside
+        className="hidden min-h-0 flex-1 flex-col lg:flex"
+        style={{ borderLeft: '1px solid var(--line)' }}
+      >
+        <div className="shrink-0 px-6 pt-2 pb-5">
+          <Balance balance={d.balance} onClick={onOpenBalance} />
+        </div>
+        <div className="mosaic mx-6 shrink-0" aria-hidden />
+        <div className="min-h-0 flex-1 overflow-y-auto px-2">
+          <HistoryScreen />
+        </div>
+      </aside>
 
       <Sheet open={more} onClose={() => setMore(false)} title="Details">
         <div className="space-y-5 pb-2">

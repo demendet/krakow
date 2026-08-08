@@ -173,6 +173,12 @@ conflating them would make "what did this trip cost" meaningless.
 | **Log** | Every event ever, with edits showing from-and-to. The screen you open when a number looks wrong. |
 | **More** | Export, clipboard, import, demo data, sign out. |
 
+Below 1024px the sections sit in a bottom bar and the keypad screen fills the
+viewport. At 1024px and up they move to a left rail, and **Add** splits into two
+panes — entry on the left, the balance and the running history beside it. The
+hardware keyboard drives the amount field on both (digits, comma, backspace,
+Escape to clear).
+
 ### Backup
 
 Firebase covers a lost phone and a cleared cache. It does not cover deleting
