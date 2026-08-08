@@ -31,6 +31,8 @@ type Store = {
   user: User | null
   mode: Mode
   configured: boolean
+  /** the demo ledger was chosen deliberately, not fallen back into */
+  demoOptedIn: boolean
   events: Event[]
   d: Derived
   sync: SyncState
@@ -67,9 +69,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [loaded, setLoaded] = useState(false)
   const [pending, setPending] = useState(false)
   const [online, setOnline] = useState(() => navigator.onLine)
-  const [demo, setDemoState] = useState(
-    () => !firebaseReady || localStorage.getItem(DEMO_FLAG) === '1',
-  )
+  // Only ever true because someone asked for it. Missing config must not put
+  // the app quietly into a local-only ledger that looks like it is working —
+  // that reads as "my data vanished" rather than "the deploy is misconfigured".
+  const [demo, setDemoState] = useState(() => localStorage.getItem(DEMO_FLAG) === '1')
 
   const [rates, setRates] = useState<RateTable>(getRates)
   const seqRef = useRef(0)
@@ -280,6 +283,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       user,
       mode,
       configured: firebaseReady,
+      demoOptedIn: demo,
       events,
       d,
       sync,
@@ -295,6 +299,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       appendMany,
       authReady,
       d,
+      demo,
       events,
       importEvents,
       loadDemoTrip,

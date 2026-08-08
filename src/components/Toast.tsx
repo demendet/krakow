@@ -12,6 +12,8 @@ import { haptic } from '../lib/haptics'
 
 type ToastSpec = {
   text: string
+  /** dim second line — what the entry did to the balance */
+  detail?: string
   action?: { label: string; run: () => void }
   tone?: 'normal' | 'bad'
   /** ms */
@@ -60,8 +62,16 @@ export function ToastHost({ children }: { children: ReactNode }) {
               boxShadow: '0 14px 34px rgba(0,0,0,.42)',
             }}
           >
-            <span className="min-w-0 flex-1 truncate" style={{ fontSize: 'var(--text-body)' }}>
-              {live.text}
+            <span className="min-w-0 flex-1" style={{ fontSize: 'var(--text-body)' }}>
+              <span className="block truncate">{live.text}</span>
+              {live.detail && (
+                <span
+                  className="disp-tight block truncate"
+                  style={{ fontSize: 'var(--text-micro)', color: 'var(--fg-dim)' }}
+                >
+                  {live.detail}
+                </span>
+              )}
             </span>
             {live.action && (
               <button

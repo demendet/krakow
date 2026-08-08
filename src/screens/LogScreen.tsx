@@ -8,7 +8,7 @@ import { toLocalInput } from '../lib/dates'
 import { convertToBase, snapshotRate } from '../lib/fx'
 import { haptic } from '../lib/haptics'
 import { newId } from '../lib/ids'
-import { GLYPH, formatBase, formatMoney, splitShort } from '../lib/money'
+import { GLYPH, formatBase, formatMoney, splitEffect } from '../lib/money'
 import { useStore } from '../lib/store'
 import { CATEGORIES, type Currency, type Expense, type Person, type Split } from '../lib/types'
 import { HistoryScreen } from './HistoryScreen'
@@ -105,7 +105,8 @@ export function LogScreen({ onOpenBalance }: { onOpenBalance: () => void }) {
 
     const who = paidBy === 'mattis' ? 'You' : 'Mikko'
     toast({
-      text: `${who} paid ${formatMoney(amount, currency, amount % 1 ? 2 : 0)} · ${splitShort(split, customShare)}`,
+      text: `${who} paid ${formatMoney(amount, currency, amount % 1 ? 2 : 0)}`,
+      detail: splitEffect(expense),
       action: {
         label: 'Undo',
         run: () => append({ type: 'expense_deleted', targetId: expense.id }),

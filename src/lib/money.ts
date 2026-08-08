@@ -65,6 +65,26 @@ export const SPLIT_LABEL: Record<Split, string> = {
   custom: 'Custom split',
 }
 
+/**
+ * What an entry actually does to the balance, said as a sentence.
+ *
+ * "All mine" plus "Mikko paid" is correct but takes a beat to reason about,
+ * and that beat is exactly what nobody has at 2am. Confirming the direction
+ * and the figure at save time removes the doubt without another tap.
+ */
+export function splitEffect(x: {
+  paidBy: Person
+  amountInBase: number
+  split: Split
+  customShare?: number
+}) {
+  const owed = x.amountInBase * (1 - payerShare(x.split, x.paidBy, x.customShare))
+  if (owed < 0.5) return x.paidBy === 'mattis' ? 'All yours, nothing owed' : "All Mikko's, nothing owed"
+  return x.paidBy === 'mattis'
+    ? `Mikko owes you ${formatBase(owed)}`
+    : `You owe Mikko ${formatBase(owed)}`
+}
+
 export function splitShort(split: Split, customShare?: number) {
   if (split === 'custom') return `${Math.round(clamp01(customShare ?? 0.5) * 100)}/${100 - Math.round(clamp01(customShare ?? 0.5) * 100)}`
   if (split === 'even') return '50/50'

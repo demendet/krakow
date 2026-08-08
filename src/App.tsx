@@ -27,10 +27,12 @@ const active = (screen: Screen, id: Screen) =>
   screen === id || (id === 'trip' && screen === 'categories')
 
 export default function App() {
-  const { ready, user, mode, configured } = useStore()
+  const { ready, user, configured, demoOptedIn } = useStore()
   const [screen, setScreen] = useState<Screen>('add')
 
-  const signedOut = configured && mode === 'firestore' && !user
+  // Unconfigured is a dead end, not a quiet demo: without this, a deploy that
+  // is missing its env vars looks like a working app with an empty ledger.
+  const signedOut = !demoOptedIn && (!configured || !user)
 
   useEffect(() => {
     if (signedOut) setScreen('add')

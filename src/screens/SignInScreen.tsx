@@ -27,6 +27,23 @@ export function SignInScreen() {
         </p>
       </div>
 
+      {!configured && (
+        <div
+          className="mb-4 rounded-lg px-4 py-3"
+          style={{ border: '1px solid var(--accent-bad)', fontSize: 'var(--text-small)' }}
+        >
+          <div className="disp" style={{ color: 'var(--accent-bad)', fontWeight: 700 }}>
+            No Firebase config in this build
+          </div>
+          <p className="mt-1" style={{ color: 'var(--fg-dim)' }}>
+            The six <code>VITE_FIREBASE_*</code> variables are missing. Vite bakes them in at
+            build time, so set them in the host and{' '}
+            <strong style={{ color: 'var(--fg)' }}>redeploy</strong> — adding them to an existing
+            deployment does nothing on its own. Until then nothing is saved to the database.
+          </p>
+        </div>
+      )}
+
       {err && (
         <p className="mb-3" style={{ color: 'var(--accent-bad)', fontSize: 'var(--text-small)' }}>
           {err}
@@ -68,7 +85,7 @@ export function SignInScreen() {
         className="mt-4 py-2"
         style={{ color: 'var(--fg-dim)', fontSize: 'var(--text-small)' }}
       >
-        {configured ? 'Just show me the app' : 'Firebase not configured — open the demo'}
+        {configured ? 'Just show me the app' : 'Open the local demo instead'}
       </button>
     </div>
   )
