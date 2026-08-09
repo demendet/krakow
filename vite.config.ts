@@ -9,6 +9,9 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
+      // src/lib/sw.ts registers it, so the default inline script must not
+      // register a second time.
+      injectRegister: false,
       includeAssets: ['icon.svg', 'icon-180.png'],
       manifest: {
         name: 'Kraków ledger',

@@ -24,10 +24,13 @@ export function RateStrip() {
       className="flex items-center gap-2 px-4 py-2 text-micro"
       style={{ borderBottom: '1px solid var(--line)' }}
     >
+      {/* Quoted per 100, the way a bureau posts it. "1 zł = 2,553 kr" put a
+          decimal comma next to three digits and read as two and a half
+          thousand kroner; per 100 there is no separator to misread at all. */}
       <span className="disp" style={{ fontWeight: 600, letterSpacing: '0.02em' }}>
-        1 <span style={{ color: 'var(--pln)' }}>zł</span>
+        100 <span style={{ color: 'var(--pln)' }}>zł</span>
         <span style={{ color: 'var(--fg-dim)' }}> = </span>
-        {formatNumber(rates.toBase.PLN, 3)} <span style={{ color: 'var(--nok)' }}>kr</span>
+        {formatNumber(rates.toBase.PLN * 100, 0)} <span style={{ color: 'var(--nok)' }}>kr</span>
       </span>
       <span style={{ color: 'var(--fg-dim)' }}>ECB {shortDate(rates.date)}</span>
       <span className="ml-auto flex items-center gap-1.5" role="status">
